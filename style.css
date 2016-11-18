@@ -1,0 +1,25 @@
+body {
+    background-image: url(images/backgr1.jpg);
+    background-size: 100%;
+}
+
+#player {
+    height: 100px;
+    width: 100px;
+    position: absolute;
+    margin-top: 500px;
+    margin-left: 100px;
+}
+
+.object {
+    height: 50px;
+    width: 50px;
+    position: absolute;
+}
+
+.laser {
+    height: 40px;
+    width: 5px;
+    position: absolute;
+    background-color: red;
+}
