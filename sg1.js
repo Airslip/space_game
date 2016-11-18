@@ -1,13 +1,3 @@
-class Obj {
-    constructor(name, width, height, x, y) {
-        this.name=name;
-        this.width=width;
-        this.height=height;
-        this.x=x;
-        this.y=y;
-    }
-}
-
 // Определение размеров окна
 var doc_w = $(window).width();
 var doc_h = $(window).height();
@@ -81,13 +71,15 @@ $(document).ready(function()
             case 17 : if(!$('.laser').is('div')) { // Атака
                         attack(); break;
                       }
+            case 27 : break; // Меню
         }
     });
     
     // Создание объектов
-    var wall = new Obj("obj1","50px", "60px", "40px", "60px");
-    $("body").append("<div class='"+wall.name+"'><img src='images/s_int2.png' width='100px'></div>");
-    $('.obj1').css({"width" : wall.width, "height" : wall.height, "margin-left" : wall.x, "margin-top" : wall.y, position: "absolute", transform: "rotate(180deg)"});
+    // Игрок
+    $("body").append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
+    $("body").append("<div class='obj1'><img src='images/s_int2.png' width='100px'></div>");
+    $('.obj1').css({"width" : "50px", "height" : "60px", "margin-left" : "40px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
     
     setInterval('floatObj();', 50);
 });

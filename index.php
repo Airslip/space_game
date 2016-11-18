@@ -7,9 +7,11 @@
         <link href="http://allfont.ru/allfont.css?fonts=cyrillicgoth" rel="stylesheet" type="text/css" /> <!--Шрифт-->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <script src="sg1.js"></script>
-        <title>Game1</title>
+        <title>Space Game</title>
     </head>
     <body>
-        <div id="player"><img src="images/s_int1.png" width="100px"></div>
+        <div class="fon_black">
+            <div class="menu_window"></div>
+        </div>
     </body>
 </html>
