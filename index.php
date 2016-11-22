@@ -10,8 +10,7 @@
         <title>Space Game</title>
     </head>
     <body>
-        <div class="fon_black">
-            <div class="menu_window"></div>
-        </div>
+        <div class="fon_black"></div>
+        <div class="menu_window"></div>
     </body>
 </html>

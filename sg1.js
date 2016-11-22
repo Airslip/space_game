@@ -2,7 +2,7 @@
 var doc_w = $(window).width();
 var doc_h = $(window).height();
 // Скорость истребителя
-let e_int_speed = 2;
+var e_int_speed = 2;
 
 function getHorPosition(name) {
     let pos = Number($(name).css("margin-left").substring(0, $(name).css("margin-left").length - 2));
