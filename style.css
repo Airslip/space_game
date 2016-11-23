@@ -7,7 +7,6 @@ body {
     height: 100px;
     width: 100px;
     position: absolute;
-    margin-top: 42%;
     margin-left: 45%;
 }
 
@@ -30,11 +29,25 @@ body {
 
 .menu_window {
     background: #838cd0;
+    border: 3px solid #0f21a0;
     opacity: 1;
     position: absolute;
-    width: 50%;
+    width: 25%;
     height: 50%;
     top: 25%;
-    left: 25%;
+    left: 35%;
     z-index: 4;
+}
+
+.menu_btn {
+    width: 60%;
+    height: 20%;
+    background: #4051cc;
+    border: 3px solid #0f21a0;
+    margin: 20px auto;
+    text-align: center;
+}
+
+.btn_text {
+    
 }

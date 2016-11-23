@@ -69,16 +69,26 @@ $(document).ready(function()
             case 37 : move(-5); break; // Влево
             case 39 : move(5); break; // Вправо
             case 17 : if(!$('.laser').is('div')) { // Атака
-                        attack(); break;
+                        attack();
                       }
-            case 27 : break; // Меню
+                      break;
+            case 27 : if($('.menu_window').is(':visible')) {
+                        $('.fon_black').hide();
+                        $('.menu_window').hide();
+                      } else {
+                        $('.fon_black').show();
+                        $('.menu_window').show();
+                      }
+                      break; // Меню
         }
     });
     
+    
     // Создание объектов
     // Игрок
-    $("body").append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
-    $("body").append("<div class='obj1'><img src='images/s_int2.png' width='100px'></div>");
+    $('body').append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
+    $('#player').css({"margin-top" : (doc_h-120)+"px"});
+    $('body').append("<div class='obj1'><img src='images/s_int2.png' width='100px'></div>");
     $('.obj1').css({"width" : "50px", "height" : "60px", "margin-left" : "40px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
     
     setInterval('floatObj();', 50);
