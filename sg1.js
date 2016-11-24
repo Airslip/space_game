@@ -3,6 +3,8 @@ var doc_w = $(window).width();
 var doc_h = $(window).height();
 // Скорость истребителя
 var e_int_speed = 2;
+// Количество врагов
+var enemy_count = 0;
 
 function getHorPosition(name) {
     let pos = Number($(name).css("margin-left").substring(0, $(name).css("margin-left").length - 2));
@@ -30,36 +32,53 @@ function attack() {
 
 function floatObj() {
     // Определение позиции вражеских объектов
-    if($('.obj1').is('div')) {
-    var marh = getHorPosition('.obj1');
-    var marv = getVertPosition('.obj1');
-    // Правая часть экрана
-    if(marh > (doc_w-100)) {
-        e_int_speed = -2;
-    }
-    // Левая часть экрана
-    if(marh < 0) {
-        e_int_speed = 2;
-    }
-    $('.obj1').css("margin-left", (marh + e_int_speed) + "px");
-    }
-    // Движение лазера
-    if($('.laser').is('div')) {
-        var mar1h = getHorPosition('.laser')
-        var mar1v = getVertPosition('.laser')
-        $('.laser').css("margin-top", (mar1v - 18) + "px");
-        // Вычисление вектора до цели
-        let shDist = Math.sqrt(Math.pow((marh-mar1h),2) + Math.pow((marv-mar1v),2));
-        // Попадание
-        if(shDist < 50) {
-            $('.obj1').remove();
-            $('.laser').remove();
+    for(var i = 0; i < enemy_count; i++) {
+        if($('.obj'+i).is('div')) {
+        var marh = getHorPosition('.obj'+i);
+        var marv = getVertPosition('.obj'+i);
+        // Правая часть экрана
+        if(marh > (doc_w-100)) {
+            e_int_speed = -2;
         }
-        // Промах (уход за экран)
-        if(mar1v < -40) $('.laser').remove();
+        // Левая часть экрана
+        if(marh < 0) {
+            e_int_speed = 2;
+        }
+        $('.obj'+i).css("margin-left", (marh + e_int_speed) + "px");
+        }
+        // Движение лазера
+        if($('.laser').is('div')) {
+            var mar1h = getHorPosition('.laser')
+            var mar1v = getVertPosition('.laser')
+            $('.laser').css("margin-top", (mar1v - 18) + "px");
+            // Вычисление вектора до цели
+            let shDist = Math.sqrt(Math.pow((marh-mar1h),2) + Math.pow((marv-mar1v),2));
+            // Попадание
+            if(shDist < 50 && $('.obj'+i).is('div')) {
+                $('.obj'+i).remove();
+                $('.laser').remove();
+            }
+            // Промах (уход за экран)
+            if(mar1v < -40) $('.laser').remove();
+        }
     }
 }
 
+// Уровни
+function round_1() {
+    // Создание объектов
+    // Игрок
+    $('body').append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
+    $('#player').css({"margin-top" : (doc_h-120)+"px"});
+    // Враги
+    enemy_count = 3;
+    let pw = 0
+    for(var i = 0; i < enemy_count; i++) {
+        $('body').append("<div class='obj"+i+"'><img src='images/s_int2.png' width='100px'></div>");
+        $('.obj'+i).css({"width" : "50px", "height" : "60px", "margin-left" : (40+pw)+"px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
+        pw=pw+100;
+    }
+}
 
 $(document).ready(function()
 {
@@ -83,13 +102,13 @@ $(document).ready(function()
         }
     });
     
-    
-    // Создание объектов
-    // Игрок
-    $('body').append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
-    $('#player').css({"margin-top" : (doc_h-120)+"px"});
-    $('body').append("<div class='obj1'><img src='images/s_int2.png' width='100px'></div>");
-    $('.obj1').css({"width" : "50px", "height" : "60px", "margin-left" : "40px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
+    // Меню
+    // Новая игра
+    $('#new_game').click(function() {
+        round_1();
+        $('.fon_black').hide();
+        $('.menu_window').hide();
+    });
     
     setInterval('floatObj();', 50);
 });

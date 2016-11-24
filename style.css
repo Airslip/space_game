@@ -48,6 +48,11 @@ body {
     text-align: center;
 }
 
+.menu_btn:hover {
+    background: #40cc50;
+    border-color: #0fa020;
+}
+
 .btn_text {
     
 }

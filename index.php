@@ -12,7 +12,7 @@
     <body>
         <div class="fon_black"></div>
         <div class="menu_window">
-            <div class="menu_btn"><p class="btn_text">НОВАЯ ИГРА</p></div>
+            <div id="new_game" class="menu_btn"><p class="btn_text">НОВАЯ ИГРА</p></div>
         </div>
     </body>
 </html>
