@@ -68,13 +68,13 @@ function floatObj() {
 function round_1() {
     // Создание объектов
     // Игрок
-    $('body').append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
+    $('#playground').append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
     $('#player').css({"margin-top" : (doc_h-120)+"px"});
     // Враги
     enemy_count = 3;
     let pw = 0
     for(var i = 0; i < enemy_count; i++) {
-        $('body').append("<div class='obj"+i+"'><img src='images/s_int2.png' width='100px'></div>");
+        $('#playground').append("<div class='obj"+i+"'><img src='images/s_int2.png' width='100px'></div>");
         $('.obj'+i).css({"width" : "50px", "height" : "60px", "margin-left" : (40+pw)+"px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
         pw=pw+100;
     }
@@ -105,6 +105,7 @@ $(document).ready(function()
     // Меню
     // Новая игра
     $('#new_game').click(function() {
+        $('#playground').empty();
         round_1();
         $('.fon_black').hide();
         $('.menu_window').hide();
