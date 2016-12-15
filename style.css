@@ -14,6 +14,13 @@ body {
     height: 40px;
     width: 5px;
     position: absolute;
+    background-color: green;
+}
+
+.red_laser {
+    height: 40px;
+    width: 5px;
+    position: absolute;
     background-color: red;
 }
 
@@ -53,6 +60,13 @@ body {
     border-color: #0fa020;
 }
 
-.btn_text {
-    
+#message {
+    background: blue;
+    font-size: 20px;
+    width: 200px;
+    height: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: none;
 }
