@@ -1,6 +1,9 @@
 // Определение размеров окна
 var doc_w = $(window).width();
 var doc_h = $(window).height();
+var mb_w = doc_w/2 - 100;
+var mb_h = doc_h/2 - 25;
+var player_hp = 100;
 // Скорость истребителя
 var e_int_speed = 2;
 // Количество врагов
@@ -29,6 +32,15 @@ function attack() {
     let mar = getHorPosition('#player');
     $('#player').before("<div class='laser'></div>");
     $('.laser').css({"margin-left" : (mar+48)+"px", "margin-top" : "500px"});
+}
+
+function defeat() {
+    if(player_hp <= 0) {
+        $('#playground').empty();
+        game_launch = false;
+        $('.fon_black').show();
+        $('.menu_window').show();
+    }
 }
 
 function floatObj() {
@@ -76,7 +88,8 @@ function floatObj() {
                 let shDist = Math.sqrt(Math.pow((ph+50-e_mar1h),2) + Math.pow((pv-e_mar1v),2));
                 // Попадание
                 if(shDist < 50) {
-                    alert("GAME OVER");
+                    player_hp = player_hp - 20;
+                    $('#player_hp').css({"width" : (player_hp)+"px"});
                     $('.e_laser'+i).remove();
                 }
                  // Промах (уход за экран)
@@ -96,17 +109,20 @@ function events() {
         // Вражеские атаки
         for(var i = 0; i < enemy_count; i++) {
             let q = getRandomInt(0, 1000);
-            if(q > 900) {
+            if(q > 800) {
                 let mar = getHorPosition('.obj'+i);
                 $('.obj'+i).before("<div class='red_laser e_laser"+i+"'></div>");
                 $('.e_laser'+i).css({"margin-left" : (mar+48)+"px", "margin-top" : "50px"});
             }       
         }
+        // Победа
         if($('#playground .enemy').length == 0) {
             game_launch = 0;
-            $('#playground').append("<div id='message'>УРОВЕНЬ ПРОЙДЕН</div>");
+            $('#playground').append("<div id='message' style='top: "+mb_h+"px; left: "+mb_w+"px;'>УРОВЕНЬ ПРОЙДЕН</div>");
             $("#message").fadeIn(1000);
         }
+        // Поражение
+        defeat();
     }
 }
 
@@ -124,6 +140,10 @@ function round_1() {
         $('.obj'+i).css({"width" : "50px", "height" : "60px", "margin-left" : (40+pw)+"px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
         pw=pw+100;
     }
+    // Интерфейс
+    $('#playground').append("<div id='player_hp_border'></div>");
+    $('#player_hp_border').css({"margin-left" : "40px", "margin-top" : (doc_h-30)+"px"});
+    $("#player_hp_border").append("<div id='player_hp'></div>");
     game_launch = true;
 }
 
@@ -155,6 +175,7 @@ $(document).ready(function()
     // Новая игра
     $('#new_game').click(function() {
         $('#playground').empty();
+        player_hp = 100;
         round_1();
         $('.fon_black').hide();
         $('.menu_window').hide();
