@@ -9,6 +9,7 @@ var e_int_speed = 2;
 // Количество врагов
 var enemy_count = 0;
 var game_launch = false;
+$game_ended = true;
 
 function getHorPosition(name) {
     let pos = Number($(name).css("margin-left").substring(0, $(name).css("margin-left").length - 2));
@@ -32,15 +33,6 @@ function attack() {
     let mar = getHorPosition('#player');
     $('#player').before("<div class='laser'></div>");
     $('.laser').css({"margin-left" : (mar+48)+"px", "margin-top" : "500px"});
-}
-
-function defeat() {
-    if(player_hp <= 0) {
-        $('#playground').empty();
-        game_launch = false;
-        $('.fon_black').show();
-        $('.menu_window').show();
-    }
 }
 
 function floatObj() {
@@ -113,16 +105,23 @@ function events() {
                 let mar = getHorPosition('.obj'+i);
                 $('.obj'+i).before("<div class='red_laser e_laser"+i+"'></div>");
                 $('.e_laser'+i).css({"margin-left" : (mar+48)+"px", "margin-top" : "50px"});
-            }       
+            }
         }
         // Победа
         if($('#playground .enemy').length == 0) {
             game_launch = 0;
-            $('#playground').append("<div id='message' style='top: "+mb_h+"px; left: "+mb_w+"px;'>УРОВЕНЬ ПРОЙДЕН</div>");
+            $('#playground').append("<div id='message' style='top: "+mb_h+"px; left: "+mb_w+"px; background: blue;'>УРОВЕНЬ ПРОЙДЕН</div>");
             $("#message").fadeIn(1000);
+            $game_ended = true;
         }
         // Поражение
-        defeat();
+        if(player_hp <= 0) {
+            $('#player').remove();
+            game_launch = 0;
+            $('#playground').append("<div id='message' style='top: "+mb_h+"px; left: "+mb_w+"px; background: red;'>ПОРАЖЕНИЕ</div>");
+            $("#message").fadeIn(1000);
+            $game_ended = true;
+        }
     }
 }
 
@@ -144,7 +143,6 @@ function round_1() {
     $('#playground').append("<div id='player_hp_border'></div>");
     $('#player_hp_border').css({"margin-left" : "40px", "margin-top" : (doc_h-30)+"px"});
     $("#player_hp_border").append("<div id='player_hp'></div>");
-    game_launch = true;
 }
 
 $(document).ready(function()
@@ -158,8 +156,9 @@ $(document).ready(function()
                         attack();
                       }
                       break;
-            case 27 : if($('.menu_window').is(':visible')) {
-                        game_launch = true;
+            case 27 : // --------------Меню--------------------
+                      if($('.menu_window').is(':visible')) {
+                        if(!$game_ended) game_launch = true;
                         $('.fon_black').hide();
                         $('.menu_window').hide();
                       } else {
@@ -167,7 +166,7 @@ $(document).ready(function()
                         $('.fon_black').show();
                         $('.menu_window').show();
                       }
-                      break; // Меню
+                      break;
         }
     });
     
@@ -179,6 +178,8 @@ $(document).ready(function()
         round_1();
         $('.fon_black').hide();
         $('.menu_window').hide();
+        game_launch = true;
+        $game_ended = false;
     });
     
         setInterval('floatObj();', 50);
