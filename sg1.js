@@ -1,15 +1,17 @@
 // Определение размеров окна
 var doc_w = $(window).width();
 var doc_h = $(window).height();
-var mb_w = doc_w/2 - 100;
+
+var mb_w = doc_w/2 - 110;
 var mb_h = doc_h/2 - 25;
 var player_hp = 100;
+var current_lvl = 0;
 // Скорость истребителя
 var e_int_speed = 2;
 // Количество врагов
 var enemy_count = 0;
 var game_launch = false;
-$game_ended = true;
+var game_ended = true;
 
 function getHorPosition(name) {
     let pos = Number($(name).css("margin-left").substring(0, $(name).css("margin-left").length - 2));
@@ -31,8 +33,9 @@ function move(speed) {
 
 function attack() {
     let mar = getHorPosition('#player');
+    let marh = getVertPosition('#player');
     $('#player').before("<div class='laser'></div>");
-    $('.laser').css({"margin-left" : (mar+48)+"px", "margin-top" : "500px"});
+    $('.laser').css({"margin-left" : (mar+48)+"px", "margin-top" : marh+"px"});
 }
 
 function floatObj() {
@@ -85,7 +88,7 @@ function floatObj() {
                     $('.e_laser'+i).remove();
                 }
                  // Промах (уход за экран)
-                 if(e_mar1v > doc_h-50) $('.e_laser'+i).remove();
+                 if(e_mar1v > doc_h-70) $('.e_laser'+i).remove();
             }
         }
     }
@@ -101,18 +104,19 @@ function events() {
         // Вражеские атаки
         for(var i = 0; i < enemy_count; i++) {
             let q = getRandomInt(0, 1000);
-            if(q > 800) {
+            if(q > 800 && !$('.e_laser'+i).is('div')) {
                 let mar = getHorPosition('.obj'+i);
                 $('.obj'+i).before("<div class='red_laser e_laser"+i+"'></div>");
-                $('.e_laser'+i).css({"margin-left" : (mar+48)+"px", "margin-top" : "50px"});
+                $('.e_laser'+i).css({"margin-left" : (mar+20)+"px", "margin-top" : "50px"});
             }
         }
         // Победа
         if($('#playground .enemy').length == 0) {
             game_launch = 0;
             $('#playground').append("<div id='message' style='top: "+mb_h+"px; left: "+mb_w+"px; background: blue;'>УРОВЕНЬ ПРОЙДЕН</div>");
+            $('#message').append("<button id='next_lvl' class='msg_btn'><p class='btn_text'>Следующий уровень</p></button>");
             $("#message").fadeIn(1000);
-            $game_ended = true;
+            game_ended = true;
         }
         // Поражение
         if(player_hp <= 0) {
@@ -120,29 +124,40 @@ function events() {
             game_launch = 0;
             $('#playground').append("<div id='message' style='top: "+mb_h+"px; left: "+mb_w+"px; background: red;'>ПОРАЖЕНИЕ</div>");
             $("#message").fadeIn(1000);
-            $game_ended = true;
+            game_ended = true;
         }
     }
 }
 
 // Уровни
-function round_1() {
-    // Создание объектов
+function round(round_num) {
     // Игрок
     $('#playground').append("<div id='player'><img src='images/s_int1.png' width='100px'></div>");
     $('#player').css({"margin-top" : (doc_h-120)+"px"});
-    // Враги
-    enemy_count = 3;
-    let pw = 0
-    for(var i = 0; i < enemy_count; i++) {
-        $('#playground').append("<div class='enemy obj"+i+"'><img src='images/s_int2.png' width='80px'></div>");
-        $('.obj'+i).css({"width" : "50px", "height" : "60px", "margin-left" : (40+pw)+"px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
-        pw=pw+100;
+    let pw = 0;
+    switch(round_num) {
+        case 1:
+            enemy_count = 3;
+            for(var i = 0; i < enemy_count; i++) {
+                $('#playground').append("<div class='enemy obj"+i+"'><img src='images/s_int2.png' width='80px'></div>");
+                $('.obj'+i).css({"width" : "50px", "height" : "60px", "margin-left" : (40+pw)+"px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
+                pw=pw+100;
+            }
+            break;
+        case 2:
+            enemy_count = 5;
+            for(var i = 0; i < enemy_count; i++) {
+                $('#playground').append("<div class='enemy obj"+i+"'><img src='images/s_int2.png' width='80px'></div>");
+                $('.obj'+i).css({"width" : "50px", "height" : "60px", "margin-left" : (40+pw)+"px", "margin-top" : "60px", position: "absolute", transform: "rotate(180deg)"});
+                pw=pw+100;
+            }
+            break;
     }
     // Интерфейс
     $('#playground').append("<div id='player_hp_border'></div>");
     $('#player_hp_border').css({"margin-left" : "40px", "margin-top" : (doc_h-30)+"px"});
     $("#player_hp_border").append("<div id='player_hp'></div>");
+    return round_num;
 }
 
 $(document).ready(function()
@@ -158,7 +173,7 @@ $(document).ready(function()
                       break;
             case 27 : // --------------Меню--------------------
                       if($('.menu_window').is(':visible')) {
-                        if(!$game_ended) game_launch = true;
+                        if(!game_ended) game_launch = true;
                         $('.fon_black').hide();
                         $('.menu_window').hide();
                       } else {
@@ -175,11 +190,21 @@ $(document).ready(function()
     $('#new_game').click(function() {
         $('#playground').empty();
         player_hp = 100;
-        round_1();
+        current_lvl = round(1);
         $('.fon_black').hide();
         $('.menu_window').hide();
         game_launch = true;
-        $game_ended = false;
+        game_ended = false;
+    });
+    $('#next_lvl').click(function() {
+        $('#playground').empty();
+        player_hp = 100;
+        current_lvl++;
+        round(current_lvl);
+        $('.fon_black').hide();
+        $('.menu_window').hide();
+        game_launch = true;
+        game_ended = false;
     });
     
         setInterval('floatObj();', 50);
